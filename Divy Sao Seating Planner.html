@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PM SHRI K.V. BURHANPUR CLASS 7TH - Divy Sao Seating Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8fafc;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(225, 29, 72, 0.03) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(159, 18, 57, 0.03) 0px, transparent 50%);
+        }
+        .excel-font {
+            font-family: 'JetBrains Mono', monospace;
+        } 
+        /* Custom professional scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .card-glow {
+            box-shadow: 0 4px 20px -2px rgba(153, 27, 27, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+        }
+        .header-gradient {
+            background: linear-gradient(135deg, #881337 0%, #9f1239 40%, #be123c 100%);
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col select-none antialiased">
+
+    <header class="header-gradient text-white shadow-xl sticky top-0 z-30 border-b border-rose-900/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3.5">
+                <div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-rose-200 shadow-inner">
+                    <i class="fa-solid fa-graduation-cap text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base sm:text-lg tracking-tight leading-tight flex items-center gap-2 text-white">
+                        PM SHRI K.V. BURHANPUR CLASS 7TH
+                    </h1>
+                    <p class="text-xs text-rose-200/90 font-medium tracking-wide">Divy Sao Seating Planner <span class="mx-1 text-rose-300/60">•</span> Protected Digital Classroom</p>
+                </div>
+            </div>
+
+            <!-- View Switcher Tabs -->
+            <div class="flex bg-rose-950/50 p-1.5 rounded-2xl border border-rose-400/20 backdrop-blur-md shadow-inner flex-wrap gap-1">
+                <button id="btn-split" onclick="switchView('split')" class="view-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 bg-rose-600 text-white shadow-md">
+                    <i class="fa-solid fa-columns"></i> Split View
+                </button>
+                <button id="btn-visual" onclick="switchView('visual')" class="view-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 text-rose-100 hover:text-white hover:bg-white/10">
+                    <i class="fa-solid fa-chalkboard-user"></i> Layout View
+                </button>
+                <button id="btn-excel" onclick="switchView('excel')" class="view-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 text-rose-100 hover:text-white hover:bg-white/10">
+                    <i class="fa-solid fa-table"></i> Excel Grid View
+                </button>
+            </div>
+
+            <!-- Read Only Badge (Download Export Removed) -->
+            <div class="flex items-center">
+                <span class="bg-rose-950/60 text-rose-100 border border-rose-500/30 px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm backdrop-blur-sm">
+                    <i class="fa-solid fa-shield-halved text-amber-300"></i> Read-Only View
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-5">
+
+        <!-- Day Selector Navigation Bar -->
+        <div class="bg-white/80 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200/80 card-glow flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center gap-2 overflow-x-auto py-1 w-full sm:w-auto">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1 flex items-center gap-1.5 shrink-0">
+                    <i class="fa-regular fa-calendar-days text-rose-600"></i> Day:
+                </span>
+                <button onclick="switchDay('Monday')" id="day-btn-Monday" class="day-tab px-4 py-2 rounded-xl text-xs font-semibold transition border border-slate-200/80 bg-slate-50/80 text-slate-700 hover:bg-rose-50 hover:border-rose-200">Monday</button>
+                <button onclick="switchDay('Tuesday')" id="day-btn-Tuesday" class="day-tab px-4 py-2 rounded-xl text-xs font-semibold transition border border-rose-500 bg-rose-600 text-white shadow-md shadow-rose-600/20 flex items-center gap-1.5">
+                    Tuesday <span class="bg-rose-800 text-[10px] px-1.5 py-0.5 rounded-md font-mono font-bold">Ref</span>
+                </button>
+                <button onclick="switchDay('Wednesday')" id="day-btn-Wednesday" class="day-tab px-4 py-2 rounded-xl text-xs font-semibold transition border border-slate-200/80 bg-slate-50/80 text-slate-700 hover:bg-rose-50 hover:border-rose-200">Wednesday</button>
+                <button onclick="switchDay('Thursday')" id="day-btn-Thursday" class="day-tab px-4 py-2 rounded-xl text-xs font-semibold transition border border-slate-200/80 bg-slate-50/80 text-slate-700 hover:bg-rose-50 hover:border-rose-200">Thursday</button>
+                <button onclick="switchDay('Friday')" id="day-btn-Friday" class="day-tab px-4 py-2 rounded-xl text-xs font-semibold transition border border-slate-200/80 bg-slate-50/80 text-slate-700 hover:bg-rose-50 hover:border-rose-200">Friday</button>
+                <button onclick="switchDay('Saturday')" id="day-btn-Saturday" class="day-tab px-4 py-2 rounded-xl text-xs font-semibold transition border border-slate-200/80 bg-slate-50/80 text-slate-700 hover:bg-rose-50 hover:border-rose-200">Saturday</button>
+            </div>
+            <div class="text-xs text-slate-500 font-medium hidden lg:flex items-center gap-1.5">
+                <i class="fa-solid fa-lock text-rose-500"></i> Official Class Rotation Schedule
+            </div>
+        </div>
+
+        <!-- Search & Info Bar -->
+        <div class="bg-white/80 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200/80 card-glow flex flex-wrap justify-between items-center gap-3">
+            <div class="relative flex-1 min-w-[240px]">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search student name..." class="w-full pl-9 pr-3.5 py-2 text-xs bg-slate-50/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500/30 focus:border-rose-500 transition-all font-medium text-slate-700 placeholder-slate-400">
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-3 text-xs text-slate-600 font-medium">
+                <span id="activeDayBadge" class="bg-rose-50 text-rose-800 font-bold px-3 py-1.5 rounded-xl border border-rose-200/80 flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-calendar-check text-rose-600"></i> Active Day: Tuesday (Ref)
+                </span>
+                <span class="flex items-center gap-1.5 text-slate-500"><span class="w-2.5 h-2.5 rounded-full bg-rose-600 inline-block shadow-sm"></span> 10 Desks (+2 Reserved)</span>
+                <span class="flex items-center gap-1.5 text-slate-500"><span class="w-2.5 h-2.5 rounded-full bg-slate-700 inline-block shadow-sm"></span> 20 Students</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1">
+
+            <!-- Visual Classroom Diagram Section -->
+            <div id="visualSection" class="lg:col-span-6 bg-white p-5 rounded-2xl border border-slate-200/80 card-glow relative flex flex-col">
+                <!-- Smart Board Banner -->
+                <div class="bg-slate-900 text-white p-4 rounded-2xl shadow-lg mb-5 relative overflow-hidden border border-slate-800">
+                    <div class="absolute inset-0 bg-gradient-to-r from-rose-950/40 via-red-950/30 to-rose-950/40 opacity-80"></div>
+                    <div class="relative z-10 flex items-center justify-between px-1 mb-2">
+                        <span class="text-[9px] font-mono text-rose-300 bg-rose-950/80 px-2.5 py-0.5 rounded-full border border-rose-800/60 shadow-sm font-semibold">
+                            <i class="fa-solid fa-wifi text-rose-400 animate-pulse mr-1"></i> SMART BOARD 4K
+                        </span>
+                        <span class="text-[9px] font-mono text-slate-400">TOUCH INTERACTIVE DISPLAY</span>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-rose-200 flex items-center justify-center gap-2 relative z-10">
+                        <i class="fa-solid fa-tv text-rose-400"></i> SMART BOARD
+                    </span>
+                    <p class="text-[10px] text-slate-400 text-center mt-1 relative z-10 font-medium">PM SHRI K.V. BURHANPUR - CLASS 7TH</p>
+                </div>
+
+                <div class="flex items-center justify-between mb-3 px-1">
+                    <div class="flex items-center gap-2">
+                        <h2 class="font-bold text-slate-800 text-sm">Classroom Desk Layout</h2>
+                        <span id="diagramDayTag" class="text-[10px] bg-rose-50 text-rose-700 border border-rose-200/80 px-2.5 py-0.5 rounded-full font-bold">Tuesday (Reference Base)</span>
+                    </div>
+                    <span class="text-[11px] text-slate-400 font-medium">Both rows shift downward daily</span>
+                </div>
+
+                <!-- Classroom Benches Layout Container (Row 1 & Row 2) -->
+                <div class="grid grid-cols-2 gap-4 relative bg-slate-50/70 p-4 rounded-2xl border border-slate-200/80 shadow-inner flex-1">
+                    
+                    <!-- Row 1 Column -->
+                    <div class="flex flex-col gap-3">
+                        <div class="bg-rose-50/80 text-rose-900 text-xs font-bold p-2.5 rounded-xl text-center border border-rose-200/80 shadow-sm flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-arrow-down-short-wide text-rose-600"></i> Row 1 (Desks 1-6)
+                        </div>
+                        <div id="leftColumnDesks" class="space-y-3">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Row 2 Column -->
+                    <div class="flex flex-col gap-3">
+                        <div class="bg-rose-50/80 text-rose-900 text-xs font-bold p-2.5 rounded-xl text-center border border-rose-200/80 shadow-sm flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-arrow-down-short-wide text-rose-600"></i> Row 2 (Desks 7-10)
+                        </div>
+                        <div id="rightColumnDesks" class="space-y-3">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="excelSection" class="lg:col-span-6 bg-white p-5 rounded-2xl border border-slate-200/80 card-glow flex flex-col min-h-[680px]">
+                
+                <!-- Excel Ribbon Header -->
+                <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 mb-3.5 shadow-sm">
+                    <div class="flex items-center justify-between pb-2.5 border-b border-slate-200/80">
+                        <div class="flex items-center gap-2">
+                            <div class="bg-rose-700 text-white font-black text-xs px-2.5 py-1 rounded-lg font-mono shadow-sm">
+                                XL
+                            </div>
+                            <span class="font-bold text-xs text-slate-800">Digital Excel Seating Workbook.xlsx</span>
+                            <span class="text-[10px] bg-slate-200/80 text-slate-600 px-2 py-0.5 rounded-md font-mono font-medium border border-slate-300/60">
+                                <i class="fa-solid fa-lock text-[9px] mr-1 text-slate-500"></i> Read-Only
+                            </span>
+                        </div>
+                        <div id="activeCellDisplay" class="excel-font text-xs font-bold text-rose-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-sm">
+                            A1 : Desk Number
+                        </div>
+                    </div>
+
+                    <!-- Formula Bar -->
+                    <div class="flex items-center gap-2 mt-2.5">
+                        <span class="excel-font font-bold text-xs text-slate-400 px-1">fx</span>
+                        <div class="h-4 w-[1px] bg-slate-300"></div>
+                        <input id="formulaInput" type="text" readonly value="=SEATING_PLANNER(CLASS_7TH, DAY)" class="w-full bg-white text-xs excel-font px-3 py-1.5 rounded-xl border border-slate-200 text-slate-600 focus:outline-none cursor-not-allowed shadow-inner">
+                    </div>
+                </div>
+
+                <!-- Excel Grid Table Container -->
+                <div class="flex-1 overflow-auto border border-slate-200 rounded-2xl shadow-inner bg-white">
+                    <table class="w-full text-xs border-collapse excel-grid">
+                        <thead>
+                            <tr class="bg-slate-100/90 text-slate-600 font-bold select-none border-b border-slate-200 sticky top-0 z-10">
+                                <th class="border-r border-b border-slate-200 w-10 py-2.5 bg-slate-100 text-center font-mono">#</th>
+                                <th class="border-r border-b border-slate-200 px-3 py-2.5 text-center font-mono w-20 bg-slate-100">A [Desk]</th>
+                                <th class="border-r border-b border-slate-200 px-3 py-2.5 text-left font-mono bg-slate-100">B [Student 1]</th>
+                                <th class="border-r border-b border-slate-200 px-3 py-2.5 text-left font-mono bg-slate-100">C [Student 2]</th>
+                                <th class="border-r border-b border-slate-200 px-3 py-2.5 text-center font-mono w-24 bg-slate-100">D [Row]</th>
+                                <th class="border-b border-slate-200 px-3 py-2.5 text-center font-mono w-28 bg-slate-100">E [Status]</th>
+                            </tr>
+                        </thead>
+                        <tbody id="excelTableBody">
+                            <!-- Dynamic Excel rows injected here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Excel Bottom Sheet Tabs -->
+                <div class="mt-3.5 pt-2 border-t border-slate-200 flex items-center justify-between text-xs overflow-x-auto">
+                    <div class="flex items-center space-x-1.5">
+                        <button id="sheet-tab-Monday" onclick="switchDay('Monday')" class="sheet-tab border px-3 py-1.5 rounded-t-xl text-slate-600 font-medium hover:bg-slate-100 transition">Monday</button>
+                        <button id="sheet-tab-Tuesday" onclick="switchDay('Tuesday')" class="sheet-tab bg-white border border-slate-200 text-rose-700 font-bold px-3 py-1.5 rounded-t-xl shadow-sm border-b-0">Tuesday</button>
+                        <button id="sheet-tab-Wednesday" onclick="switchDay('Wednesday')" class="sheet-tab border px-3 py-1.5 rounded-t-xl text-slate-600 font-medium hover:bg-slate-100 transition">Wednesday</button>
+                        <button id="sheet-tab-Thursday" onclick="switchDay('Thursday')" class="sheet-tab border px-3 py-1.5 rounded-t-xl text-slate-600 font-medium hover:bg-slate-100 transition">Thursday</button>
+                        <button id="sheet-tab-Friday" onclick="switchDay('Friday')" class="sheet-tab border px-3 py-1.5 rounded-t-xl text-slate-600 font-medium hover:bg-slate-100 transition">Friday</button>
+                        <button id="sheet-tab-Saturday" onclick="switchDay('Saturday')" class="sheet-tab border px-3 py-1.5 rounded-t-xl text-slate-600 font-medium hover:bg-slate-100 transition">Saturday</button>
+                    </div>
+                    <span class="text-[10px] text-slate-400 font-mono hidden sm:inline">PROTECTED SHEET | 100% ZOOM</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Decode 00 Secret Modal -->
+    <div id="decodeModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-amber-300">
+            <div class="p-4 bg-amber-400 text-amber-950 flex justify-between items-center font-bold">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-key text-xl"></i>
+                    <h3 class="text-base">Decode 00 - Secret Info</h3>
+                </div>
+                <button onclick="toggleDecodeModal()" class="text-amber-950 hover:text-black p-1 rounded-lg">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="p-5 space-y-4 bg-amber-50/40 text-slate-700 text-sm">
+                <div class="bg-white p-3.5 rounded-xl border border-amber-200 shadow-sm flex items-center gap-3">
+                    <span class="text-2xl font-mono font-extrabold bg-amber-200 text-amber-900 px-3 py-1 rounded-xl border border-amber-300">00</span>
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-base">Row 2 Time Pass Area</h4>
+                        <p class="text-xs text-amber-800 font-semibold">PM SHRI K.V. BURHANPUR - CLASS 7TH</p>
+                    </div>
+                </div>
+                <p class="text-xs leading-relaxed text-slate-600 bg-white p-3.5 rounded-xl border border-slate-200 shadow-inner">
+                    The code <strong class="text-amber-900 font-mono font-bold bg-amber-100 px-1.5 py-0.5 rounded border border-amber-200">00</strong> on the last two benches (Bench 11 & Bench 12) of <strong>Row 2</strong> marks the official <strong>Row 2 Time Pass Area</strong> for Class 7th backbenchers!
+                </p>
+            </div>
+            <div class="p-3 bg-slate-100 border-t border-slate-200 text-right">
+                <button onclick="toggleDecodeModal()" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-auto py-3.5 bg-white border-t border-slate-200/80 text-slate-600 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center gap-2">
+                <span id="headerBrandTitle" class="font-bold text-slate-700 select-none">
+                    PM SHRI K.V. BURHANPUR CLASS 7TH
+                </span>
+                <span class="text-slate-300">|</span>
+                <span class="text-slate-500 font-medium">Divy Sao Seating Planner</span>
+            </div>
+
+            <!-- Ultra-Small Minimal Decode Link -->
+            <div class="flex items-center">
+                <button id="decode00BtnBottom" onclick="toggleDecodeModal()" class="text-[7px] text-slate-400 hover:text-rose-700 opacity-40 hover:opacity-100 transition font-mono tracking-tighter" title="Decode 00 Secret Info">
+                    [00]
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const tuesdayBaseData = [
+            { id: 1, deskNum: "①", student1: "Uzair", student2: "hitesh", column: "Row 1", status: "Occupied" },
+            { id: 2, deskNum: "②", student1: "yash", student2: "junaid", column: "Row 1", status: "Occupied" },
+            { id: 3, deskNum: "③", student1: "Nikunj", student2: "Kushagra", column: "Row 1", status: "Occupied" },
+            { id: 4, deskNum: "④", student1: "Nabeel", student2: "Akshat", column: "Row 1", status: "Occupied" },
+            { id: 5, deskNum: "⑤", student1: "Aditya.D", student2: "Naitik", column: "Row 1", status: "Occupied" },
+            { id: 6, deskNum: "⑥", student1: "Aaryan", student2: "Rudra", column: "Row 1", status: "Occupied" },
+
+            { id: 7, deskNum: "⑦", student1: "Divy (Class Monitor 👑)", student2: "Manthan", column: "Row 2", status: "Occupied" },
+            { id: 8, deskNum: "⑧", student1: "Aradhya", student2: "Pragnya", column: "Row 2", status: "Occupied" },
+            { id: 9, deskNum: "⑨", student1: "Dhanush", student2: "Aditya.S", column: "Row 2", status: "Occupied" },
+            { id: 10, deskNum: "⑩", student1: "Aakarsh", student2: "Prasun", column: "Row 2", status: "Occupied" },
+            
+            { id: 11, deskNum: "— (00)", student1: "—", student2: "—", column: "Row 2", status: "Extra Bench (00)" },
+            { id: 12, deskNum: "☒ (00)", student1: "—", student2: "—", column: "Row 2", status: "Extra Bench (00)" }
+        ];
+
+        const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        
+        const DAY_OFFSETS = {
+            'Monday': -1,
+            'Tuesday': 0,
+            'Wednesday': 1,
+            'Thursday': 2,
+            'Friday': 3,
+            'Saturday': 4
+        };
+
+        let activeDay = 'Tuesday';
+        let seatingData = [];
+        let currentViewMode = 'split';
+
+        document.addEventListener("DOMContentLoaded", () => {
+            computeDaySeating(activeDay);
+        });
+
+        function computeDaySeating(day) {
+            activeDay = day;
+            const offset = DAY_OFFSETS[day];
+            seatingData = JSON.parse(JSON.stringify(tuesdayBaseData));
+
+            if (offset !== 0) {
+                const leftIndices = [0, 1, 2, 3, 4, 5];
+                const rightIndices = [6, 7, 8, 9];
+
+                const leftLen = leftIndices.length;
+                const origLeft = leftIndices.map(idx => ({ s1: tuesdayBaseData[idx].student1, s2: tuesdayBaseData[idx].student2 }));
+
+                leftIndices.forEach((deskIdx, i) => {
+                    const srcIdx = ((i - offset) % leftLen + leftLen) % leftLen;
+                    seatingData[deskIdx].student1 = origLeft[srcIdx].s1;
+                    seatingData[deskIdx].student2 = origLeft[srcIdx].s2;
+                });
+
+                const rightLen = rightIndices.length;
+                const origRight = rightIndices.map(idx => ({ s1: tuesdayBaseData[idx].student1, s2: tuesdayBaseData[idx].student2 }));
+
+                rightIndices.forEach((deskIdx, i) => {
+                    const srcIdx = ((i - offset) % rightLen + rightLen) % rightLen;
+                    seatingData[deskIdx].student1 = origRight[srcIdx].s1;
+                    seatingData[deskIdx].student2 = origRight[srcIdx].s2;
+                });
+            }
+
+            updateDayUI();
+            renderVisualLayout();
+            renderExcelGrid();
+        }
+
+        function switchDay(day) {
+            computeDaySeating(day);
+        }
+
+        function updateDayUI() {
+            const activeBadge = document.getElementById("activeDayBadge");
+            if (activeBadge) {
+                activeBadge.innerHTML = `
+                    <i class="fa-solid fa-calendar-check text-rose-600"></i> Active Day: ${activeDay} ${activeDay === 'Tuesday' ? '(Ref)' : ''}
+                `;
+            }
+
+            const diagramTag = document.getElementById("diagramDayTag");
+            if (diagramTag) {
+                diagramTag.innerText = `${activeDay} ${activeDay === 'Tuesday' ? '(Reference Base)' : 'Rotated Layout'}`;
+            }
+
+            WEEKDAYS.forEach(day => {
+                const btn = document.getElementById(`day-btn-${day}`);
+                const tab = document.getElementById(`sheet-tab-${day}`);
+                
+                if (btn) {
+                    if (day === activeDay) {
+                        btn.className = "day-tab px-4 py-2 rounded-xl text-xs font-semibold transition border border-rose-500 bg-rose-600 text-white shadow-md shadow-rose-600/20 flex items-center gap-1.5";
+                    } else {
+                        btn.className = "day-tab px-4 py-2 rounded-xl text-xs font-semibold transition border border-slate-200/80 bg-slate-50/80 text-slate-700 hover:bg-rose-50 hover:border-rose-200";
+                    }
+                }
+
+                if (tab) {
+                    if (day === activeDay) {
+                        tab.className = "sheet-tab bg-white border border-slate-200 text-rose-700 font-bold px-3 py-1.5 rounded-t-xl shadow-sm border-b-0";
+                    } else {
+                        tab.className = "sheet-tab border px-3 py-1.5 rounded-t-xl text-slate-600 font-medium hover:bg-slate-100 transition";
+                    }
+                }
+            });
+        }
+
+        function renderVisualLayout() {
+            const leftCol = document.getElementById("leftColumnDesks");
+            const rightCol = document.getElementById("rightColumnDesks");
+
+            if (!leftCol || !rightCol) return;
+
+            leftCol.innerHTML = "";
+            rightCol.innerHTML = "";
+
+            seatingData.forEach((desk) => {
+                const card = document.createElement("div");
+                card.id = `visual-desk-${desk.id}`;
+                card.className = "bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm relative transition-all duration-300 hover:shadow-md";
+
+                if (desk.id === 12) {
+                    card.innerHTML = `
+                        <div class="h-20 flex flex-col items-center justify-center border-2 border-slate-200 border-dashed rounded-xl bg-slate-50/50 relative overflow-hidden">
+                            <span class="absolute top-1 right-1.5 font-mono font-bold text-[9px] bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded-md border border-amber-200 shadow-sm">00</span>
+                            <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                                <i class="fa-solid fa-xmark text-6xl text-slate-400"></i>
+                            </div>
+                            <span class="text-xs font-bold text-slate-700 z-10">Extra Bench</span>
+                            <span class="text-[10px] font-semibold text-slate-400 z-10">Reserved Slot</span>
+                        </div>
+                    `;
+                    rightCol.appendChild(card);
+                    return;
+                }
+
+                if (desk.id === 11) {
+                    card.innerHTML = `
+                        <div class="h-20 flex flex-col items-center justify-center border border-dashed border-slate-200 rounded-xl bg-slate-50/50 relative">
+                            <span class="absolute top-1 right-1.5 font-mono font-bold text-[9px] bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded-md border border-amber-200 shadow-sm">00</span>
+                            <span class="text-xs font-bold text-slate-700">— Extra Bench —</span>
+                            <span class="text-[10px] font-semibold text-slate-400">Reserved Slot</span>
+                        </div>
+                    `;
+                    rightCol.appendChild(card);
+                    return;
+                }
+
+                const hasMonitor = desk.student1.includes("Divy") || desk.student2.includes("Divy");
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-1.5 mb-2.5">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg bg-rose-50 text-rose-700 font-bold text-xs flex items-center justify-center border border-rose-200 shadow-sm">
+                                ${desk.deskNum}
+                            </span>
+                            ${hasMonitor ? `<span class="bg-amber-50 text-amber-800 text-[9px] font-extrabold px-2 py-0.5 rounded-md border border-amber-200 flex items-center gap-1 shadow-sm"><i class="fa-solid fa-crown text-amber-500"></i> Monitor</span>` : ''}
+                        </div>
+                        <span class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">
+                            Desk ${desk.id}
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-center">
+                        <div class="bg-slate-50/80 p-2 rounded-xl border border-slate-100 shadow-sm">
+                            <i class="fa-solid fa-user ${hasMonitor && desk.student1.includes("Divy") ? 'text-amber-500' : 'text-rose-600'} text-xs mb-1 block"></i>
+                            <span class="font-semibold text-xs text-slate-800 block truncate" title="${desk.student1}">${desk.student1}</span>
+                        </div>
+                        <div class="bg-slate-50/80 p-2 rounded-xl border border-slate-100 shadow-sm">
+                            <i class="fa-solid fa-user ${hasMonitor && desk.student2.includes("Divy") ? 'text-amber-500' : 'text-rose-600'} text-xs mb-1 block"></i>
+                            <span class="font-semibold text-xs text-slate-800 block truncate" title="${desk.student2}">${desk.student2}</span>
+                        </div>
+                    </div>
+                `;
+
+                if (desk.column === "Row 1") {
+                    leftCol.appendChild(card);
+                } else {
+                    rightCol.appendChild(card);
+                }
+            });
+        }
+
+        function renderExcelGrid() {
+            const tbody = document.getElementById("excelTableBody");
+            if (!tbody) return;
+            tbody.innerHTML = "";
+
+            seatingData.forEach((row, index) => {
+                const tr = document.createElement("tr");
+                tr.id = `excel-row-${row.id}`;
+                tr.className = "hover:bg-rose-50/40 transition-colors";
+
+                tr.innerHTML = `
+                    <td class="border-r border-b border-slate-200 text-center font-mono text-slate-400 bg-slate-50/80 select-none py-2.5">${index + 1}</td>
+                    
+                    <td class="border-r border-b border-slate-200 px-3 py-2.5 text-center font-bold text-slate-700 bg-white">
+                        ${row.deskNum}
+                    </td>
+
+                    <td class="border-r border-b border-slate-200 px-3 py-2.5 font-semibold text-slate-800 bg-white">
+                        ${row.student1}
+                    </td>
+
+                    <td class="border-r border-b border-slate-200 px-3 py-2.5 font-semibold text-slate-800 bg-white">
+                        ${row.student2}
+                    </td>
+
+                    <td class="border-r border-b border-slate-200 px-3 py-2.5 text-center font-semibold text-slate-600 select-none bg-slate-50/80">
+                        ${row.column}
+                    </td>
+
+                    <td class="border-b border-slate-200 p-2 text-center bg-white">
+                        <span class="inline-block px-2.5 py-0.5 rounded-md text-[11px] font-semibold shadow-sm ${
+                            row.status.includes('(00)') ? 'bg-amber-50 text-amber-800 border border-amber-200 font-mono' :
+                            row.status === 'Occupied' ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-slate-100 text-slate-500'
+                        }">
+                            ${row.status}
+                        </span>
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        function handleSearch() {
+            const query = document.getElementById("searchInput").value.toLowerCase().trim();
+
+            seatingData.forEach(item => {
+                const card = document.getElementById(`visual-desk-${item.id}`);
+                const matches = query !== "" && (
+                    item.student1.toLowerCase().includes(query) || 
+                    item.student2.toLowerCase().includes(query)
+                );
+
+                if (card) {
+                    if (matches) {
+                        card.classList.add("ring-2", "ring-rose-500", "bg-rose-50/60", "shadow-md");
+                    } else {
+                        card.classList.remove("ring-2", "ring-rose-500", "bg-rose-50/60", "shadow-md");
+                    }
+                }
+            });
+        }
+
+        function toggleDecodeModal() {
+            const modal = document.getElementById("decodeModal");
+            if (modal) {
+                if (modal.classList.contains("hidden")) {
+                    modal.classList.remove("hidden");
+                } else {
+                    modal.classList.add("hidden");
+                }
+            }
+        }
+
+        function switchView(viewType) {
+            currentViewMode = viewType;
+            const visualSec = document.getElementById("visualSection");
+            const excelSec = document.getElementById("excelSection");
+
+            const btnSplit = document.getElementById("btn-split");
+            const btnVisual = document.getElementById("btn-visual");
+            const btnExcel = document.getElementById("btn-excel");
+
+            [btnSplit, btnVisual, btnExcel].forEach(btn => {
+                if (btn) btn.className = "view-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 text-rose-100 hover:text-white hover:bg-white/10";
+            });
+
+            if (visualSec) visualSec.style.display = "none";
+            if (excelSec) excelSec.style.display = "none";
+
+            if (viewType === 'split') {
+                if (visualSec) {
+                    visualSec.className = "lg:col-span-6 bg-white p-5 rounded-2xl border border-slate-200/80 card-glow relative flex flex-col";
+                    visualSec.style.display = "flex";
+                }
+                if (excelSec) {
+                    excelSec.className = "lg:col-span-6 bg-white p-5 rounded-2xl border border-slate-200/80 card-glow flex flex-col min-h-[680px]";
+                    excelSec.style.display = "flex";
+                }
+                if (btnSplit) btnSplit.className = "view-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 bg-rose-600 text-white shadow-md";
+            } else if (viewType === 'visual') {
+                if (visualSec) {
+                    visualSec.className = "lg:col-span-12 max-w-4xl mx-auto bg-white p-5 rounded-2xl border border-slate-200/80 card-glow relative w-full flex flex-col";
+                    visualSec.style.display = "flex";
+                }
+                if (btnVisual) btnVisual.className = "view-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 bg-rose-600 text-white shadow-md";
+            } else if (viewType === 'excel') {
+                if (excelSec) {
+                    excelSec.className = "lg:col-span-12 bg-white p-5 rounded-2xl border border-slate-200/80 card-glow flex flex-col min-h-[680px]";
+                    excelSec.style.display = "flex";
+                }
+                if (btnExcel) btnExcel.className = "view-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 bg-rose-600 text-white shadow-md";
+            }
+        }
+    </script>
+</body>
+</html>
